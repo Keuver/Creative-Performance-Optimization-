@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPO Lab — Pitch</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f0e8;
+    --gold: #c9a84c;
+    --gold-light: #e8d08a;
+    --red: #c0392b;
+    --gray: #2a2a2a;
+    --gray-mid: #4a4a4a;
+    --gray-light: #8a8a8a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { font-size: 16px; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* ── DECK WRAPPER ── */
+  .deck {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6vw 8vw;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    overflow: hidden;
+  }
+
+  .slide.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  .slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  .slide > * { position: relative; z-index: 1; }
+
+  /* ── PROGRESS BAR ── */
+  .progress {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: var(--gold);
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* ── COUNTER ── */
+  .counter {
+    position: fixed;
+    bottom: 24px;
+    right: 32px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    color: var(--gray-light);
+    z-index: 100;
+  }
+
+  /* ── NAV BUTTONS ── */
+  .nav {
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 100;
+  }
+
+  .nav button {
+    background: none;
+    border: 1px solid var(--gray-mid);
+    color: var(--gray-light);
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .nav button:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* ══════════════════════════════
+     SLIDE 1 — TÍTULO
+  ══════════════════════════════ */
+  #s1 {
+    background: var(--black);
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  #s1 .eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+
+  #s1 h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 12vw, 160px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: var(--white);
+  }
+
+  #s1 h1 span { color: var(--gold); }
+
+  #s1 .subtitle {
+    margin-top: 32px;
+    font-size: clamp(14px, 1.4vw, 18px);
+    font-weight: 300;
+    color: var(--gray-light);
+    max-width: 480px;
+    line-height: 1.6;
+    border-left: 1px solid var(--gold);
+    padding-left: 20px;
+  }
+
+  #s1 .bg-text {
+    position: absolute;
+    right: -2vw;
+    bottom: -4vh;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(120px, 22vw, 280px);
+    color: rgba(201,168,76,0.04);
+    letter-spacing: 0.05em;
+    pointer-events: none;
+    user-select: none;
+    line-height: 1;
+  }
+
+  /* ══════════════════════════════
+     SLIDE 2 — PROBLEMA
+  ══════════════════════════════ */
+  #s2 { background: var(--black); }
+
+  #s2 .label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+
+  #s2 h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 52px);
+    line-height: 1.15;
+    color: var(--white);
+    max-width: 700px;
+    margin-bottom: 48px;
+  }
+
+  #s2 h2 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 800px;
+  }
+
+  .col-block .col-title {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gray-light);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+
+  .col-block ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .col-block ul li {
+    font-size: clamp(13px, 1.1vw, 15px);
+    font-weight: 300;
+    color: var(--white);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .col-block ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: 10px;
+    top: 3px;
+  }
+
+  .col-block.bad ul li::before { color: var(--red); }
+
+  /* ══════════════════════════════
+     SLIDE 3 — TESE
+  ══════════════════════════════ */
+  #s3 { background: var(--black); }
+
+  #s3 .label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+
+  #s3 h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 3.5vw, 46px);
+    line-height: 1.2;
+    color: var(--white);
+    max-width: 680px;
+    margin-bottom: 40px;
+  }
+
+  .elements-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 640px;
+    margin-bottom: 40px;
+  }
+
+  .tag {
+    border: 1px solid var(--gray-mid);
+    color: var(--gray-light);
+    padding: 6px 14px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 400;
+    transition: all 0.2s;
+  }
+
+  .tag.active-tag {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .thesis-box {
+    border-left: 2px solid var(--gold);
+    padding: 16px 24px;
+    background: rgba(201,168,76,0.05);
+    max-width: 600px;
+  }
+
+  .thesis-box p {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(14px, 1.4vw, 18px);
+    color: var(--white);
+    line-height: 1.6;
+  }
+
+  /* ══════════════════════════════
+     SLIDE 4 — OPORTUNIDADE
+  ══════════════════════════════ */
+  #s4 { background: var(--black); }
+
+  #s4 .label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  #s4 h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 3.5vw, 46px);
+    line-height: 1.2;
+    color: var(--white);
+    max-width: 640px;
+    margin-bottom: 40px;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 48px;
+    margin-bottom: 40px;
+  }
+
+  .stat-block .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 6vw, 72px);
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-block .stat-label {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--gray-light);
+    margin-top: 6px;
+    max-width: 180px;
+    line-height: 1.4;
+  }
+
+  .stat-block .stat-source {
+    font-size: 9px;
+    color: var(--gray-mid);
+    margin-top: 4px;
+    letter-spacing: 0.1em;
+  }
+
+  .opp-box {
+    border: 1px solid var(--gray-mid);
+    padding: 20px 28px;
+    max-width: 620px;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .opp-box .opp-title {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .opp-box p {
+    font-size: clamp(13px, 1.1vw, 15px);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.6;
+  }
+
+  /* ══════════════════════════════
+     SLIDE 5 — O QUE É
+  ══════════════════════════════ */
+  #s5 { background: var(--black); }
+
+  #s5 .label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  #s5 h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 7vw, 88px);
+    line-height: 0.95;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  #s5 .cpo-full {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--gray-light);
+    margin-bottom: 36px;
+    text-transform: uppercase;
+  }
+
+  #s5 .core-question {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(16px, 1.8vw, 22px);
+    color: var(--gold);
+    border-left: 2px solid var(--gold);
+    padding-left: 20px;
+    margin-bottom: 36px;
+    line-height: 1.5;
+    max-width: 580px;
+  }
+
+  .steps-row {
+    display: flex;
+    gap: 0;
+    max-width: 720px;
+  }
+
+  .step-item {
+    flex: 1;
+    padding: 0 16px 0 0;
+    border-right: 1px solid var(--gray);
+    margin-right: 16px;
+  }
+
+  .step-item:last-child {
+    border-right: none;
+    margin-right: 0;
+  }
+
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: rgba(201,168,76,0.2);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .step-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .step-desc {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--gray-light);
+    line-height: 1.4;
+  }
+
+  /* ══════════════════════════════
+     SLIDE 6 — DIFERENCIAL
+  ══════════════════════════════ */
+  #s6 { background: var(--black); }
+
+  #s6 .label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  #s6 h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 3.5vw, 46px);
+    color: var(--white);
+    max-width: 600px;
+    margin-bottom: 40px;
+    line-height: 1.2;
+  }
+
+  #s6 h2 em { font-style: italic; color: var(--gold); }
+
+  .diff-grid {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 0 40px;
+    max-width: 760px;
+    align-items: start;
+  }
+
+  .diff-divider {
+    background: var(--gray-mid);
+    height: 100%;
+    min-height: 160px;
+  }
+
+  .diff-col .diff-header {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+
+  .diff-col.others .diff-header { color: var(--gray-mid); }
+  .diff-col.cpo .diff-header { color: var(--gold); }
+
+  .diff-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .diff-col ul li {
+    font-size: clamp(13px, 1.1vw, 15px);
+    font-weight: 300;
+    line-height: 1.4;
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .diff-col.others ul li { color: var(--gray-mid); }
+  .diff-col.others ul li::before { content: '×'; position: absolute; left: 0; color: var(--gray-mid); }
+
+  .diff-col.cpo ul li { color: var(--white); }
+  .diff-col.cpo ul li::before { content: '→'; position: absolute; left: 0; color: var(--gold); }
+
+  .diff-bottom {
+    margin-top: 36px;
+    max-width: 600px;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(14px, 1.4vw, 17px);
+    color: var(--gray-light);
+    line-height: 1.6;
+    border-top: 1px solid var(--gray);
+    padding-top: 24px;
+  }
+
+  .diff-bottom strong { color: var(--white); font-style: normal; font-family: 'DM Sans', sans-serif; font-weight: 500; }
+
+  /* ══════════════════════════════
+     SLIDE 7 — COMO FUNCIONA
+  ══════════════════════════════ */
+  #s7 { background: var(--black); }
+
+  #s7 .label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  #s7 h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(24px, 3vw, 40px);
+    color: var(--white);
+    margin-bottom: 36px;
+  }
+
+  .phases-row {
+    display: flex;
+    gap: 0;
+    max-width: 860px;
+    margin-bottom: 36px;
+  }
+
+  .phase {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid var(--gray);
+    margin-right: -1px;
+    position: relative;
+  }
+
+  .phase.highlight {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.04);
+    z-index: 1;
+  }
+
+  .phase-tag {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gray-light);
+    margin-bottom: 8px;
+  }
+
+  .phase.highlight .phase-tag { color: var(--gold); }
+
+  .phase-name {
+    font-weight: 500;
+    font-size: clamp(12px, 1vw, 14px);
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .phase-duration {
+    font-size: 11px;
+    color: var(--gray-light);
+    font-weight: 300;
+    margin-bottom: 12px;
+  }
+
+  .phase ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .phase ul li {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--gray-light);
+    padding-left: 12px;
+    position: relative;
+    line-height: 1.3;
+  }
+
+  .phase ul li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+  }
+
+  .deliverable-note {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--gray-light);
+    border-left: 1px solid var(--gray-mid);
+    padding-left: 16px;
+    max-width: 600px;
+    line-height: 1.5;
+  }
+
+  .deliverable-note strong {
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  /* ══════════════════════════════
+     SLIDE 8 — ICP
+  ══════════════════════════════ */
+  #s8 { background: var(--black); }
+
+  #s8 .label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  #s8 h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 3.5vw, 46px);
+    color: var(--white);
+    margin-bottom: 40px;
+    max-width: 600px;
+    line-height: 1.2;
+  }
+
+  .icp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 760px;
+    margin-bottom: 32px;
+  }
+
+  .icp-card {
+    background: var(--gray);
+    padding: 20px;
+  }
+
+  .icp-card .icp-icon {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--gold);
+    margin-bottom: 8px;
+    line-height: 1;
+  }
+
+  .icp-card .icp-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray-light);
+    margin-bottom: 6px;
+  }
+
+  .icp-card .icp-value {
+    font-size: clamp(12px, 1vw, 14px);
+    font-weight: 400;
+    color: var(--white);
+    line-height: 1.4;
+  }
+
+  .icp-pain {
+    max-width: 640px;
+    padding: 16px 20px;
+    border: 1px solid var(--gray-mid);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .icp-pain .pain-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gray-light);
+    margin-bottom: 10px;
+  }
+
+  .icp-pain p {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(13px, 1.2vw, 16px);
+    color: var(--gold);
+    line-height: 1.5;
+  }
+
+  /* ══════════════════════════════
+     SLIDE 9 — VALOR
+  ══════════════════════════════ */
+  #s9 { background: var(--black); }
+
+  #s9 .label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  #s9 h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 3.5vw, 46px);
+    color: var(--white);
+    margin-bottom: 40px;
+    max-width: 640px;
+    line-height: 1.2;
+  }
+
+  .value-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    max-width: 800px;
+    margin-bottom: 36px;
+  }
+
+  .value-card {
+    background: var(--gray);
+    padding: 20px 16px;
+  }
+
+  .value-card .val-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .value-card .val-label {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+
+  .value-card .val-sub {
+    font-size: 10px;
+    color: var(--gray-light);
+    line-height: 1.3;
+  }
+
+  .cumulative-note {
+    max-width: 640px;
+    border-left: 2px solid var(--gold);
+    padding: 12px 20px;
+    background: rgba(201,168,76,0.04);
+  }
+
+  .cumulative-note p {
+    font-size: clamp(12px, 1.1vw, 14px);
+    font-weight: 300;
+    color: var(--gray-light);
+    line-height: 1.6;
+  }
+
+  .cumulative-note strong { color: var(--white); font-weight: 500; }
+
+  /* ══════════════════════════════
+     SLIDE 10 — DEFENSABILIDADE
+  ══════════════════════════════ */
+  #s10 { background: var(--black); }
+
+  #s10 .label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  #s10 h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 3.5vw, 46px);
+    color: var(--white);
+    margin-bottom: 40px;
+    max-width: 640px;
+    line-height: 1.2;
+  }
+
+  .layers-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-width: 640px;
+    margin-bottom: 32px;
+  }
+
+  .layer {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 20px;
+    background: var(--gray);
+  }
+
+  .layer-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: rgba(201,168,76,0.3);
+    min-width: 32px;
+  }
+
+  .layer-content .layer-title {
+    font-weight: 500;
+    font-size: clamp(12px, 1vw, 14px);
+    color: var(--white);
+    margin-bottom: 3px;
+  }
+
+  .layer-content .layer-desc {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--gray-light);
+    line-height: 1.4;
+  }
+
+  .moat-note {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(13px, 1.2vw, 16px);
+    color: var(--gold);
+    max-width: 580px;
+    line-height: 1.6;
+    border-top: 1px solid var(--gray);
+    padding-top: 24px;
+  }
+
+  /* ══════════════════════════════
+     SLIDE 11 — VISÃO
+  ══════════════════════════════ */
+  #s11 { background: var(--black); }
+
+  #s11 .label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  #s11 h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 3.5vw, 46px);
+    color: var(--white);
+    margin-bottom: 48px;
+    max-width: 640px;
+    line-height: 1.2;
+  }
+
+  .vision-transform {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 680px;
+    margin-bottom: 40px;
+  }
+
+  .vision-from, .vision-to {
+    padding: 20px 24px;
+  }
+
+  .vision-from {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--gray);
+  }
+
+  .vision-to {
+    background: rgba(201,168,76,0.06);
+    border: 1px solid var(--gold);
+  }
+
+  .vision-tag {
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .vision-from .vision-tag { color: var(--gray-mid); }
+  .vision-to .vision-tag { color: var(--gold); }
+
+  .vision-text {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(14px, 1.4vw, 18px);
+    line-height: 1.5;
+  }
+
+  .vision-from .vision-text { color: var(--gray-light); }
+  .vision-to .vision-text { color: var(--white); }
+
+  .vision-arrow {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--gold);
+    text-align: center;
+    letter-spacing: 0.1em;
+  }
+
+  /* ══════════════════════════════
+     SLIDE 12 — FECHAMENTO
+  ══════════════════════════════ */
+  #s12 {
+    background: var(--black);
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  #s12 .label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  #s12 .closing-line {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 6vw, 76px);
+    line-height: 1;
+    color: var(--white);
+    max-width: 800px;
+    margin-bottom: 48px;
+  }
+
+  #s12 .closing-line span { color: var(--gold); }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    max-width: 760px;
+    margin-bottom: 40px;
+  }
+
+  .summary-item {
+    padding: 16px;
+    background: var(--gray);
+  }
+
+  .summary-item .s-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .summary-item .s-text {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--gray-light);
+    line-height: 1.4;
+  }
+
+  #s12 .cta-block {
+    border-top: 1px solid var(--gray-mid);
+    padding-top: 24px;
+    max-width: 640px;
+  }
+
+  #s12 .cta-block .cta-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gray-light);
+    margin-bottom: 10px;
+  }
+
+  #s12 .cta-block p {
+    font-size: clamp(13px, 1.2vw, 16px);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.6;
+  }
+
+  #s12 .bg-text {
+    position: absolute;
+    right: -2vw;
+    bottom: -4vh;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(120px, 22vw, 280px);
+    color: rgba(201,168,76,0.04);
+    letter-spacing: 0.05em;
+    pointer-events: none;
+    user-select: none;
+    line-height: 1;
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- SLIDE 1 -->
+  <div class="slide active" id="s1">
+    <div class="eyebrow">Creative Performance Optimization</div>
+    <h1>CPO<br><span>LAB</span></h1>
+    <p class="subtitle">Da intuição criativa à ciência de performance — um laboratório que transforma criativos em vantagem competitiva mensurável.</p>
+    <div class="bg-text">LAB</div>
+  </div>
+
+  <!-- SLIDE 2 -->
+  <div class="slide" id="s2">
+    <div class="label">O Problema</div>
+    <h2>O mercado ainda trata criatividade como <em>opinião</em></h2>
+    <div class="two-col">
+      <div class="col-block bad">
+        <div class="col-title">Como decisões são tomadas hoje</div>
+        <ul>
+          <li>Gosto pessoal e feeling da equipe</li>
+          <li>Pressão por volume sem método</li>
+          <li>Testes sem controle de variável</li>
+          <li>Sem rastreabilidade de aprendizado</li>
+        </ul>
+      </div>
+      <div class="col-block">
+        <div class="col-title">O que isso gera</div>
+        <ul>
+          <li>Repetição dos mesmos erros</li>
+          <li>Desperdício de verba em escala</li>
+          <li>Criativo virou commodity</li>
+          <li>Empresas não sabem o que funciona</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 -->
+  <div class="slide" id="s3">
+    <div class="label">A Tese</div>
+    <h2>Criatividade pode ser tratada como variável de negócio</h2>
+    <div class="elements-grid">
+      <span class="tag active-tag">CTA</span>
+      <span class="tag active-tag">Preço</span>
+      <span class="tag">Promoção</span>
+      <span class="tag active-tag">Demo</span>
+      <span class="tag">Creator / UGC</span>
+      <span class="tag">Branding</span>
+      <span class="tag active-tag">Duração</span>
+      <span class="tag">Overlay Visual</span>
+      <span class="tag">Estilo Nativo</span>
+      <span class="tag active-tag">Hook</span>
+      <span class="tag">Social Proof</span>
+      <span class="tag">Voiceover</span>
+    </div>
+    <div class="thesis-box">
+      <p>Se cada elemento pode ser isolado, ele pode ser analisado, comparado, e transformado em aprendizado acumulado.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 -->
+  <div class="slide" id="s4">
+    <div class="label">O Insight de Mercado</div>
+    <h2>A maior alavanca de performance está sendo ignorada</h2>
+    <div class="stat-row">
+      <div class="stat-block">
+        <div class="stat-num">49%</div>
+        <div class="stat-label">da variância de performance em Meta Ads é atribuída ao criativo</div>
+        <div class="stat-source">Fonte: Nielsen / Meta Creative Research</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">70%</div>
+        <div class="stat-label">do investimento em mídia é gasto sem sistema de aprendizado criativo</div>
+        <div class="stat-source">Estimativa de mercado</div>
+      </div>
+    </div>
+    <div class="opp-box">
+      <div class="opp-title">A oportunidade</div>
+      <p>Empresas otimizam campanha, segmentação, lance e orçamento — e negligenciam a estrutura criativa que influencia diretamente a conversão. Existe espaço claro para um player especializado em transformar criativos em ativo analítico.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 -->
+  <div class="slide" id="s5">
+    <div class="label">A Solução</div>
+    <h2>CPO LAB</h2>
+    <div class="cpo-full">Creative Performance Optimization Lab</div>
+    <div class="core-question">"Quais elementos criativos fazem nosso CPA cair e nossa conversão subir?"</div>
+    <div class="steps-row">
+      <div class="step-item">
+        <div class="step-num">01</div>
+        <div class="step-label">Ler o passado</div>
+        <div class="step-desc">Análise histórica para encontrar correlações</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">02</div>
+        <div class="step-label">Formular hipóteses</div>
+        <div class="step-desc">Padrões viram perguntas testáveis</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">03</div>
+        <div class="step-label">Testar com rigor</div>
+        <div class="step-desc">1 variável por vez, ciclos controlados</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">04</div>
+        <div class="step-label">Aprender</div>
+        <div class="step-desc">Separar evidência de achismo</div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">05</div>
+        <div class="step-label">Sistematizar</div>
+        <div class="step-desc">Playbook replicável para a marca</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 -->
+  <div class="slide" id="s6">
+    <div class="label">O Diferencial</div>
+    <h2>O diferencial não é criar peças.<br>É criar <em>clareza</em>.</h2>
+    <div class="diff-grid">
+      <div class="diff-col others">
+        <div class="diff-header">O que o mercado entrega</div>
+        <ul>
+          <li>Peças e campanhas</li>
+          <li>Relatórios de CTR</li>
+          <li>Dashboards descritivos</li>
+          <li>Opinião com gráfico</li>
+        </ul>
+      </div>
+      <div class="diff-divider"></div>
+      <div class="diff-col cpo">
+        <div class="diff-header">O que o CPO Lab entrega</div>
+        <ul>
+          <li>Lógica de decisão baseada em dados</li>
+          <li>Aprendizado acumulado e auditável</li>
+          <li>Padrões replicáveis testados</li>
+          <li>Playbook criativo da marca</li>
+        </ul>
+      </div>
+    </div>
+    <div class="diff-bottom">
+      Não vendemos criativos bonitos. Vendemos uma forma mais inteligente de decidir <strong>o que produzir</strong>.
+    </div>
+  </div>
+
+  <!-- SLIDE 7 -->
+  <div class="slide" id="s7">
+    <div class="label">Como Funciona</div>
+    <h2>Sprint de Viabilidade → Lab de 90 dias → Playbook</h2>
+    <div class="phases-row">
+      <div class="phase">
+        <div class="phase-tag">Fase 0</div>
+        <div class="phase-name">Sprint de Viabilidade</div>
+        <div class="phase-duration">10 dias</div>
+        <ul>
+          <li>Auditoria de dados históricos</li>
+          <li>Baseline + Dashboard v1</li>
+          <li>Backlog inicial de hipóteses</li>
+          <li>Plano de 90 dias</li>
+        </ul>
+      </div>
+      <div class="phase highlight">
+        <div class="phase-tag">Fase 1</div>
+        <div class="phase-name">Lab de 90 dias</div>
+        <div class="phase-duration">6 ciclos quinzenais</div>
+        <ul>
+          <li>Testes controlados (1 variável/vez)</li>
+          <li>Readouts quinzenais de resultado</li>
+          <li>Dashboard atualizado</li>
+          <li>Decisões baseadas em IC ≥ 90%</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="phase-tag">Entregável Final</div>
+        <div class="phase-name">Playbook Criativo</div>
+        <div class="phase-duration">Ativo permanente</div>
+        <ul>
+          <li>Anatomia do criativo vencedor</li>
+          <li>Blacklist de elementos a evitar</li>
+          <li>Guia para equipe criativa</li>
+          <li>Roadmap do próximo trimestre</li>
+        </ul>
+      </div>
+    </div>
+    <div class="deliverable-note">
+      O Sprint de Viabilidade serve como filtro — <strong>se não houver dados suficientes, o diagnóstico é honesto e o Lab não começa</strong>. Isso é parte do diferencial.
+    </div>
+  </div>
+
+  <!-- SLIDE 8 -->
+  <div class="slide" id="s8">
+    <div class="label">Para Quem</div>
+    <h2>Quem mais se beneficia do CPO Lab</h2>
+    <div class="icp-grid">
+      <div class="icp-card">
+        <div class="icp-icon">15K+</div>
+        <div class="icp-label">Investimento mensal</div>
+        <div class="icp-value">Mínimo R$15k/mês em Meta Ads com histórico de pelo menos 3 meses</div>
+      </div>
+      <div class="icp-card">
+        <div class="icp-icon">50+</div>
+        <div class="icp-label">Volume de conversões</div>
+        <div class="icp-value">Mínimo 50 conversões/semana para garantir dados estatisticamente válidos</div>
+      </div>
+      <div class="icp-card">
+        <div class="icp-icon">2–4</div>
+        <div class="icp-label">Criativos por semana</div>
+        <div class="icp-value">Capacidade de produzir variantes continuamente (interno ou agência)</div>
+      </div>
+    </div>
+    <div class="icp-pain">
+      <div class="pain-label">A dor que une esse perfil</div>
+      <p>"Testamos muito, mas não sabemos por que uma peça performa melhor que outra."</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 9 -->
+  <div class="slide" id="s9">
+    <div class="label">O Valor Real</div>
+    <h2>O cliente não compra um teste. Compra um ativo.</h2>
+    <div class="value-row">
+      <div class="value-card">
+        <div class="val-num">→</div>
+        <div class="val-label">Clareza sobre o que funciona</div>
+        <div class="val-sub">Com dados e evidência, não opinião</div>
+      </div>
+      <div class="value-card">
+        <div class="val-num">↓</div>
+        <div class="val-label">Menos desperdício criativo</div>
+        <div class="val-sub">Parar de escalar criativos fracos</div>
+      </div>
+      <div class="value-card">
+        <div class="val-num">↑</div>
+        <div class="val-label">Velocidade de iteração</div>
+        <div class="val-sub">Backlog priorizado sempre disponível</div>
+      </div>
+      <div class="value-card">
+        <div class="val-num">∞</div>
+        <div class="val-label">Aprendizado cumulativo</div>
+        <div class="val-sub">Cada teste aumenta a inteligência criativa</div>
+      </div>
+    </div>
+    <div class="cumulative-note">
+      <p>O ativo criado é permanente: <strong>cada teste bem feito aumenta a inteligência criativa da marca</strong> — e esse aprendizado continua útil muito além do contrato.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 10 -->
+  <div class="slide" id="s10">
+    <div class="label">Defensabilidade</div>
+    <h2>Por que esse negócio pode virar categoria</h2>
+    <div class="layers-col">
+      <div class="layer">
+        <div class="layer-num">01</div>
+        <div class="layer-content">
+          <div class="layer-title">Performance Marketing</div>
+          <div class="layer-desc">Conhecimento profundo de Meta Ads, atribuição, otimização de funil e métricas de conversão</div>
+        </div>
+      </div>
+      <div class="layer">
+        <div class="layer-num">02</div>
+        <div class="layer-content">
+          <div class="layer-title">Análise Estruturada de Criativos</div>
+          <div class="layer-desc">Taxonomia proprietária de 15 dimensões, tagueamento e cruzamento com dados de performance</div>
+        </div>
+      </div>
+      <div class="layer">
+        <div class="layer-num">03</div>
+        <div class="layer-content">
+          <div class="layer-title">Sistematização de Aprendizado</div>
+          <div class="layer-desc">Método de experimentação controlada com critério estatístico (IC ≥ 90%) e playbook auditável</div>
+        </div>
+      </div>
+    </div>
+    <div class="moat-note">
+      Quanto mais testes, mais aprendizado. Quanto mais aprendizado, mais vantagem acumulada. O negócio se fortalece com o tempo.
+    </div>
+  </div>
+
+  <!-- SLIDE 11 -->
+  <div class="slide" id="s11">
+    <div class="label">A Visão</div>
+    <h2>Mudar como marcas tomam decisões criativas</h2>
+    <div class="vision-transform">
+      <div class="vision-from">
+        <div class="vision-tag">De</div>
+        <div class="vision-text">"Vamos testar esse criativo porque parece bom."</div>
+      </div>
+      <div class="vision-arrow">↓</div>
+      <div class="vision-to">
+        <div class="vision-tag">Para</div>
+        <div class="vision-text">"Vamos testar isso porque os dados indicam maior probabilidade de ganho."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 12 -->
+  <div class="slide" id="s12">
+    <div class="label">Resumo</div>
+    <div class="closing-line">Um laboratório que transforma<br>criatividade em<br><span>vantagem competitiva</span><br>mensurável.</div>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="s-num">01</div>
+        <div class="s-text">Mercado decide criativo por intuição</div>
+      </div>
+      <div class="summary-item">
+        <div class="s-num">02</div>
+        <div class="s-text">Criativo é a principal alavanca de performance</div>
+      </div>
+      <div class="summary-item">
+        <div class="s-num">03</div>
+        <div class="s-text">Falta método, rastreabilidade e aprendizado</div>
+      </div>
+      <div class="summary-item">
+        <div class="s-num">04</div>
+        <div class="s-text">CPO Lab resolve isso com ciência aplicada</div>
+      </div>
+    </div>
+    <div class="cta-block">
+      <div class="cta-label">Próximo passo</div>
+      <p>Quero entender: sua operação tem o perfil? Conversa de 30 minutos para checar os critérios e, se fizer sentido, apresentar o Sprint de Viabilidade.</p>
+    </div>
+    <div class="bg-text">CPO</div>
+  </div>
+
+</div>
+
+<!-- CONTROLS -->
+<div class="progress" id="progress"></div>
+<div class="counter" id="counter">1 / 12</div>
+<div class="nav">
+  <button id="prev">←</button>
+  <button id="next">→</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function go(n) {
+    slides[current].classList.remove('active');
+    current = (n + total) % total;
+    slides[current].classList.add('active');
+    document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('progress').style.width = `${((current + 1) / total) * 100}%`;
+  }
+
+  document.getElementById('next').addEventListener('click', () => go(current + 1));
+  document.getElementById('prev').addEventListener('click', () => go(current - 1));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(current + 1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(current - 1);
+  });
+
+  // init progress
+  document.getElementById('progress').style.width = `${(1 / total) * 100}%`;
+</script>
+</body>
+</html>
